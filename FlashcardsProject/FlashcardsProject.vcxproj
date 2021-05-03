@@ -139,11 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Exercise.cpp" />
     <ClCompile Include="ExerciseRepository.cpp" />
     <ClCompile Include="Flashcard.cpp" />
     <ClCompile Include="GuessTheMeaning.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Controller.h" />
@@ -151,6 +153,7 @@
     <ClInclude Include="ExerciseRepository.h" />
     <ClInclude Include="Flashcard.h" />
     <ClInclude Include="GuessTheMeaning.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

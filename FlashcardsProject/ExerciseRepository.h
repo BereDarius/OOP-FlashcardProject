@@ -14,7 +14,7 @@ private:
 	void printExercise(ostream& os, Exercise* e) const;
 
 public:
-	ExerciseRepository() {}
+	ExerciseRepository(vector<Exercise*> e) : exercises(e) {}
 	~ExerciseRepository() {}
 	vector<Exercise*> getExercises();
 	void addExercise(Exercise* e);
@@ -22,6 +22,7 @@ public:
 	bool updateFlashcard(int id, int difficulty, string front, string back);
 	bool updateGuessTheMeaning(int id, int difficulty, string foreignWord, string options[4], int correctOptionIndex);
 	int searchExercise(int id);
+	Exercise* getExerciseById(int id);
 	vector<Exercise*> filterByDifficulty(int difficulty);
 	friend ostream& operator<<(ostream& os, const ExerciseRepository& e);
 };

@@ -59,6 +59,16 @@ int ExerciseRepository::searchExercise(int id)
 	return -1;
 }
 
+Exercise* ExerciseRepository::getExerciseById(int id)
+{
+	for (Exercise* exercise : this->exercises) {
+		if (exercise->getId() == id) {
+			return exercise;
+		}
+	}
+	return nullptr;
+}
+
 vector<Exercise*> ExerciseRepository::filterByDifficulty(int difficulty)
 {
 	vector<Exercise*> result;

@@ -1,22 +1,18 @@
 ﻿#include "Flashcard.h"
 #include "GuessTheMeaning.h"
-#include "Controller.h"
+#include "UI.h"
 #include <iostream>
 
 int main() {
+	vector<Exercise*> vect;
 
-	string options[4] = { "I", "You", "He", "She" };
-
-	GuessTheMeaning* g = new GuessTheMeaning(1, 1, "watashi", options, 0);
-
-	Flashcard* f = new Flashcard(2, 2, "kaban", "bag");
-
-	ExerciseRepository repo;
-
-	repo.addExercise(g);
-	repo.addExercise(f);
+	ExerciseRepository repo{ vect };
 
 	Controller c{ repo };
+
+	UI ui{ c };
+
+	ui.mainLoop();
 
 	return 0;
 }
