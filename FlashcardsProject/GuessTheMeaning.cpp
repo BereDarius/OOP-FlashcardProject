@@ -35,7 +35,7 @@ void GuessTheMeaning::setCorrectOptionIndex(int index)
 
 void GuessTheMeaning::print(ostream& out) const
 {
-	out << "ID: " << this->id << "difficulty: N" << this->difficultyLevel << "; foreign word: " << this->foreignWord << "; options: [" <<
+	out << "ID: " << this->id << "; difficulty: N" << this->difficultyLevel << "; foreign word: " << this->foreignWord << "; options: [" <<
 		this->options[0] << ", " << this->options[1] << ", " << this->options[2] << ", " << this->options[3] << "]; " <<
 		"correct answer: " << this->options[this->correctOptionIndex] << endl;
 }

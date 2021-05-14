@@ -17,5 +17,6 @@ public:
 	bool CTRLUpdateGuessTheMeaning(int id, int difficulty, string foreignWord, string options[4], int correctOptionIndex);
 	int CTRLSearchExercise(int id);
 	vector<Exercise*> CTRLFilterByDifficulty(int difficulty);
-
+	void CTRLUndo();
+	void CTRLRedo();
 };

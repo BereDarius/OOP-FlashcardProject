@@ -10,17 +10,28 @@ void UI::updateFlashcard(int id)
 	cout << "Please enter the new difficulty: ";
 	cin >> difficulty;
 	cout << endl;
-	while (difficulty < 1 || difficulty > 5) {
-		cout << "The difficulty value should be between 1 and 5" << endl
-			<< "Please enter the new difficulty: ";
+	while (difficulty < 1 || difficulty > 5 || this->isNotValidInput()) {
+		cout << "Please enter a valid value for the difficulty: ";
 		cin >> difficulty;
 		cout << endl;
+		if (difficulty < 1 || difficulty > 5) {
+			cout << "The difficulty value should be between 1 and 5" << endl
+				<< "Please enter the new difficulty: ";
+			cin >> difficulty;
+			cout << endl;
+		}
 	}
 	cout << "Please enter the new front word: ";
 	cin >> front;
+	if (front == "") {
+		throw exception();
+	}
 	cout << endl;
 	cout << "Please enter the new back word: ";
 	cin >> back;
+	if (back == "") {
+		throw exception();
+	}
 	cout << endl;
 	this->ctrl.CTRLUpdateFlashcard(id, difficulty, front, back);
 }
@@ -34,41 +45,65 @@ void UI::updateGuessTheMeaning(int id)
 	cout << "Please enter the new difficulty: ";
 	cin >> difficulty;
 	cout << endl;
-	while (difficulty < 1 || difficulty > 5) {
-		cout << "The difficulty value should be between 1 and 5" << endl
-			<< "Please enter the new difficulty: ";
+	while (difficulty < 1 || difficulty > 5 || this->isNotValidInput()) {
+		cout << "Please enter a valid value for the difficulty: ";
 		cin >> difficulty;
 		cout << endl;
+		if (difficulty < 1 || difficulty > 5) {
+			cout << "The difficulty value should be between 1 and 5" << endl
+				<< "Please enter the new difficulty: ";
+			cin >> difficulty;
+			cout << endl;
+		}
 	}
 	cout << "Please enter the new foreign word: ";
 	cin >> foreignWord;
+	if (foreignWord == "") {
+		throw exception();
+	}
 	cout << endl;
 	for (int i = 0; i < 4; i++) {
 		cout << "Please enter the new option at index " << i << ": ";
 		cin >> options[i];
+		if (options[i] == "") {
+			throw exception();
+		}
 		cout << endl;
 	}
 	cout << "Please enter the index of the correct option: ";
 	cin >> correctOptionsIndex;
 	cout << endl;
-	while (correctOptionsIndex < 0 || correctOptionsIndex > 3) {
-		cout << "The value you entered is not valid..." << endl;
-		cout << "Please enter the index of the correct option: ";
+	while (correctOptionsIndex < 0 || correctOptionsIndex > 3 || this->isNotValidInput()) {
+		cin.clear();
+		cin.ignore(256, '\n');
+		cout << "Please enter a valid value for the correct options index: ";
 		cin >> correctOptionsIndex;
+		cout << endl;
+		if (correctOptionsIndex < 0 || correctOptionsIndex > 3) {
+			cout << "The value for the correct option index must be between 0 and 3..." << endl;
+			cout << "Please enter the index of the correct option: ";
+			cin >> correctOptionsIndex;
+			cout << endl;
+		}
 	}
 	this->ctrl.CTRLUpdateGuessTheMeaning(id, difficulty, foreignWord, options, correctOptionsIndex);
 }
 
-bool UI::isNotValidCommand(int input)
+bool UI::isNotValidCommand(int command)
 {
-	return input < 0 || input > 6;
+	return command < 0 || command > 8;
+}
+
+bool UI::isNotValidInput()
+{
+	return cin.fail();
 }
 
 void UI::addExercise()
 {
-	cout << "What type of exercise do you wish to add?" << endl 
-		<< "1. Flashcard" << endl 
-		<< "2. Guess the Meaning" << endl 
+	cout << "What type of exercise do you wish to add?" << endl
+		<< "1. Flashcard" << endl
+		<< "2. Guess the Meaning" << endl
 		<< "Enter your choice: ";
 	int type;
 	cin >> type;
@@ -143,6 +178,8 @@ void UI::printMenu()
 		<< "4. Search for an Exercise (by ID)" << endl
 		<< "5. Filter by difficulty" << endl
 		<< "6. Print Repository" << endl
+		<< "7. Undo" << endl
+		<< "8. Redo" << endl
 		<< "0. Exit" << endl;
 }
 
@@ -152,7 +189,9 @@ int UI::readInput()
 	cout << "Please enter a command: ";
 	cin >> input;
 	cout << endl;
-	while (this->isNotValidCommand(input)) {
+	while (this->isNotValidInput() || this->isNotValidCommand(input)) {
+		cin.clear();
+		cin.ignore(256, '\n');
 		cout << "Please enter a valid input: ";
 		cin >> input;
 		cout << endl;
@@ -176,26 +215,43 @@ Exercise* UI::readExercise(int type)
 		cout << "Please enter the ID: ";
 		cin >> id;
 		cout << endl;
-		while (this->ctrl.CTRLSearchExercise(id) != -1) {
-			cout << "An exercise with this ID already exists in the repository..." << endl;
-			cout << "Please enter the ID: ";
+		while (this->ctrl.CTRLSearchExercise(id) != -1 || this->isNotValidInput()) {
+			cin.clear();
+			cin.ignore(256, '\n');
+			cout << "Please enter a valid ID: ";
 			cin >> id;
 			cout << endl;
+			if (this->ctrl.CTRLSearchExercise(id) == -1) {
+				cout << "An exercise with the same ID is already in the repository..." << endl;
+			}
 		}
 		cout << "Please enter the difficulty: ";
 		cin >> difficulty;
 		cout << endl;
-		while (difficulty < 1 || difficulty > 5) {
-			cout << "The difficulty value should be between 1 and 5" << endl
-				<< "Please enter the difficulty: ";
+		while (difficulty < 1 || difficulty > 5 || this->isNotValidInput()) {
+			cin.clear();
+			cin.ignore(256, '\n');
+			cout << "Please enter a valid value for the difficulty: ";
 			cin >> difficulty;
 			cout << endl;
+			if (difficulty < 1 || difficulty > 5) {
+				cout << "The difficulty value should be between 1 and 5" << endl
+					<< "Please enter the difficulty: ";
+				cin >> difficulty;
+				cout << endl;
+			}
 		}
 		cout << "Please enter the front word: ";
 		cin >> front;
 		cout << endl;
+		if (front == "") {
+			throw exception();
+		}
 		cout << "Please enter the back word: ";
 		cin >> back;
+		if (back == "") {
+			throw exception();
+		}
 		cout << endl;
 		f = new Flashcard(id, difficulty, front, back);
 		return f;
@@ -204,41 +260,67 @@ Exercise* UI::readExercise(int type)
 		cout << "Please enter the ID: ";
 		cin >> id;
 		cout << endl;
-		while (this->ctrl.CTRLSearchExercise(id) != -1) {
-			cout << "An exercise with this ID already exists in the repository..." << endl;
-			cout << "Please enter the ID: ";
+		while (this->ctrl.CTRLSearchExercise(id) != -1 || this->isNotValidInput()) {
+			cin.clear();
+			cin.ignore(256, '\n');
+			cout << "Please enter a valid ID: ";
 			cin >> id;
 			cout << endl;
+			if (this->ctrl.CTRLSearchExercise(id) == -1) {
+				cout << "An exercise with the same ID is already in the repository..." << endl;
+			}
 		}
 		cout << "Please enter the difficulty: ";
 		cin >> difficulty;
 		cout << endl;
-		while (difficulty < 1 || difficulty > 5) {
-			cout << "The difficulty value should be between 1 and 5" << endl
-				<< "Please enter the difficulty: ";
+		while (difficulty < 1 || difficulty > 5 || this->isNotValidInput()) {
+			cin.clear();
+			cin.ignore(256, '\n');
+			cout << "Please enter a valid value for the difficulty: ";
 			cin >> difficulty;
 			cout << endl;
+			if (difficulty < 1 || difficulty > 5) {
+				cout << "The difficulty value should be between 1 and 5" << endl
+					<< "Please enter the difficulty: ";
+				cin >> difficulty;
+				cout << endl;
+			}
 		}
 		cout << "Please enter the foreign word: ";
 		cin >> foreignWord;
+		if (foreignWord == "") {
+			throw exception();
+		}
 		cout << endl;
 		for (int i = 0; i < 4; i++) {
 			cout << "Please enter the option at index " << i << ": ";
 			cin >> options[i];
+			if (options[i] == "") {
+				throw exception();
+			}
 			cout << endl;
 		}
 		cout << "Please enter the index of correct option: ";
 		cin >> correctOptionsIndex;
 		cout << endl;
-		while (correctOptionsIndex < 0 || correctOptionsIndex > 3) {
-			cout << "The value you entered is not valid..." << endl;
-			cout << "Please enter the index of the correct option: ";
+		while (correctOptionsIndex < 0 || correctOptionsIndex > 3 || this->isNotValidInput()) {
+			cin.clear();
+			cin.ignore(256, '\n');
+			cout << "Please enter a valid value for the correct options index: ";
 			cin >> correctOptionsIndex;
+			cout << endl;
+			if (correctOptionsIndex < 0 || correctOptionsIndex > 3) {
+				cout << "The value for the correct option index must be between 0 and 3..." << endl;
+				cout << "Please enter the index of the correct option: ";
+				cin >> correctOptionsIndex;
+				cout << endl;
+			}
 		}
 		g = new GuessTheMeaning(id, difficulty, foreignWord, options, correctOptionsIndex);
 		return g;
 		break;
 	default:
+		return nullptr;
 		break;
 	}
 }
@@ -259,28 +341,68 @@ void UI::mainLoop()
 			cout << "Please enter the ID of the exercise you wish to remove: ";
 			cin >> id;
 			cout << endl;
+			while (this->ctrl.CTRLSearchExercise(id) != -1 || this->isNotValidInput()) {
+				cin.clear();
+				cin.ignore(256, '\n');
+				cout << "Please enter a valid ID: ";
+				cin >> id;
+				cout << endl;
+			}
 			this->removeExercise(id);
 			break;
 		case 3:
 			cout << "Please enter the ID of the exercise you wish to update: ";
 			cin >> id;
 			cout << endl;
+			while (this->ctrl.CTRLSearchExercise(id) != -1 || this->isNotValidInput()) {
+				cin.clear();
+				cin.ignore(256, '\n');
+				cout << "Please enter a valid ID: ";
+				cin >> id;
+				cout << endl;
+			}
 			this->updateExercise(id);
 			break;
 		case 4:
 			cout << "Please enter the ID of the exercise you wish to search for: ";
 			cin >> id;
 			cout << endl;
+			while (this->isNotValidInput()) {
+				cin.clear();
+				cin.ignore(256, '\n');
+				cout << "Please enter a valid ID: ";
+				cin >> id;
+				cout << endl;
+			}
 			this->searchExercise(id);
 			break;
 		case 5:
 			cout << "Please enter the difficulty: ";
 			cin >> difficulty;
 			cout << endl;
+			while (difficulty < 1 || difficulty > 5 || this->isNotValidInput()) {
+				cin.clear();
+				cin.ignore(256, '\n');
+				cout << "Please enter a valid value for the difficulty: ";
+				cin >> difficulty;
+				cout << endl;
+				if (difficulty < 1 || difficulty > 5) {
+					cout << "The difficulty value should be between 1 and 5" << endl
+						<< "Please enter the difficulty: ";
+					cin >> difficulty;
+					cout << endl;
+				}
+			}
 			this->filterByDifficulty(difficulty);
 			break;
 		case 6:
 			this->printRepository();
+			break;
+		case 7:
+			this->ctrl.CTRLUndo();
+			break;
+		case 8:
+			this->ctrl.CTRLRedo();
 			break;
 		case 0:
 			goto end;

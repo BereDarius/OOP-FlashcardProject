@@ -14,7 +14,8 @@ private:
 	Controller ctrl;
 	void updateFlashcard(int id);
 	void updateGuessTheMeaning(int id);
-	bool isNotValidCommand(int input);
+	bool isNotValidInput();
+	bool isNotValidCommand(int command);
 	void addExercise();
 	void removeExercise(int id);
 	void updateExercise(int id);

@@ -21,5 +21,5 @@ void Flashcard::setBack(string newBack)
 }
 
 void Flashcard::print(ostream& out) const {
-	out << "ID: " << this->id << "difficulty: N" << this->difficultyLevel << "; front: " << this->front << "; back: " << this->back << endl;
+	out << "ID: " << this->id << " " << "; difficulty: N" << this->difficultyLevel << "; front: " << this->front << "; back: " << this->back << endl;
 }

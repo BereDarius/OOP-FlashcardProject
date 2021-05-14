@@ -29,3 +29,13 @@ vector<Exercise*> Controller::CTRLFilterByDifficulty(int difficulty)
 {
 	return this->repo.filterByDifficulty(difficulty);
 }
+
+void Controller::CTRLUndo()
+{
+	this->repo.undo();
+}
+
+void Controller::CTRLRedo()
+{
+	this->repo.redo();
+}
